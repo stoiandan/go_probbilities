@@ -4,50 +4,50 @@ import "fmt"
 
 //RandVar is a random variable
 type RandVar struct {
-	Description         string
-	isEqualDistribution bool
-	domainProbability   map[string]float32
+	Event        string
+	isEqualDist  bool
+	probabilites map[string]float32
 }
 
-//New creates a new random variable
-func New(description string, domain []string) *RandVar {
-	domainLen := len(domain)
-	domainProbability := make(map[string]float32, domainLen)
-	probability := float32(1 / domainLen)
+// New creates a new random variable
+func New(event string, domain []string) *RandVar {
+	ln := len(domain)
+	domProb := make(map[string]float32, ln)
+	prob := float32(1 / ln)
 
-	for i := 0; i < domainLen; i++ {
-		domainProbability[domain[i]] = probability
+	for _, d := range domain {
+		domProb[d] = prob
 	}
 
 	return &RandVar{
-		Description:         description,
-		isEqualDistribution: true,
-		domainProbability:   domainProbability,
+		Event:        event,
+		isEqualDist:  true,
+		probabilites: domProb,
 	}
 }
 
-//NewWithDistribution creates a random variable with unequal distribution
-func NewWithDistribution(description string, domain []string, distribution []float32) (*RandVar, error) {
-	if err := veriftyDistributionIsLogical(description, distribution); err != nil {
+// NewWithDist creates a random variable with unequal distribution
+func NewWithDist(event string, domain []string, dist []float32) (*RandVar, error) {
+	if err := VerifyDist(event, dist); err != nil {
 		return nil, err
 	}
 
-	domainLen := len(domain)
-	domainProb := make(map[string]float32, domainLen)
-	for i := 0; i < domainLen; i++ {
-		domainProb[domain[i]] = distribution[i]
+	ln := len(domain)
+	domProb := make(map[string]float32, ln)
+	for i, d := range domain {
+		domProb[d] = dist[i]
 	}
 
 	return &RandVar{
-		Description:         description,
-		isEqualDistribution: false,
-		domainProbability:   domainProb,
+		Event:        event,
+		isEqualDist:  false,
+		probabilites: domProb,
 	}, nil
 }
 
 //Probability calculates the probanility of a given event
 func (r RandVar) Probability(event string) (float32, error) {
-	if prob, contains := r.domainProbability[event]; contains {
+	if prob, ok := r.probabilites[event]; ok {
 		return prob, nil
 	}
 	return 0, fmt.Errorf("event: %s not in domain", event)

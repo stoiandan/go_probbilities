@@ -2,8 +2,8 @@ package randvar
 
 import "errors"
 
-//isDistributionLogical verifies if distribution sum is 1
-func veriftyDistributionIsLogical(event string, distribution []float32) error {
+// VerifyDist verifies if distribution sum is 1
+func VerifyDist(event string, distribution []float32) error {
 	var sum float32 = 0.0
 	for _, d := range distribution {
 		sum += d
