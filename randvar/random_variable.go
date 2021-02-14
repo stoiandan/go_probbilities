@@ -2,7 +2,7 @@ package randvar
 
 import "fmt"
 
-//RandVar is a random variable
+// RandVar is a random variable
 type RandVar struct {
 	Event        string
 	isEqualDist  bool
@@ -27,15 +27,15 @@ func New(event string, domain []string) *RandVar {
 }
 
 // NewWithDist creates a random variable with unequal distribution
-func NewWithDist(event string, domain []string, dist []float32) (*RandVar, error) {
-	if err := VerifyDist(event, dist); err != nil {
+func NewWithDist(event string, domDist map[string]float32) (*RandVar, error) {
+	if err := VerifyDist(event, domDist); err != nil {
 		return nil, err
 	}
 
-	ln := len(domain)
+	ln := len(domDist)
 	domProb := make(map[string]float32, ln)
-	for i, d := range domain {
-		domProb[d] = dist[i]
+	for e, d := range domDist {
+		domProb[e] = d
 	}
 
 	return &RandVar{
@@ -45,10 +45,10 @@ func NewWithDist(event string, domain []string, dist []float32) (*RandVar, error
 	}, nil
 }
 
-//Probability calculates the probanility of a given event
+// Probability calculates the probanility of a given event
 func (r RandVar) Probability(event string) (float32, error) {
 	if prob, ok := r.probabilites[event]; ok {
 		return prob, nil
 	}
-	return 0, fmt.Errorf("event: %s not in domain", event)
+	return -1, fmt.Errorf("event: %s not in domain", event)
 }

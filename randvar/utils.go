@@ -3,7 +3,7 @@ package randvar
 import "errors"
 
 // VerifyDist verifies if distribution sum is 1
-func VerifyDist(event string, distribution []float32) error {
+func VerifyDist(event string, distribution map[string]float32) error {
 	var sum float32 = 0.0
 	for _, d := range distribution {
 		sum += d
