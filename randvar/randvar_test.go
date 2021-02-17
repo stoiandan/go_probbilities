@@ -5,9 +5,9 @@ import "testing"
 func TestRoleDiceProb(t *testing.T) {
 	diceRole := New("rolling a dice", []string{"one", "two", "three", "four", "five", "six"})
 
-	prob, err := diceRole.Probability("two")
+	prob, ok := diceRole.Probability("two")
 
-	if err != nil {
+	if ok == false {
 		t.Errorf("Event two is not recornized")
 	}
 
