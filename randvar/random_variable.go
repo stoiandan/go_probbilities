@@ -32,7 +32,6 @@ func NewWithDist(event string, domDist map[string]float64) (*RandVar, error) {
 
 	ln := len(domDist)
 	domProb := make(map[string]float64, ln)
-
 	for e, d := range domDist {
 		domProb[e] = d
 	}
